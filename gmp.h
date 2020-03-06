@@ -38,7 +38,7 @@ see https://www.gnu.org/licenses/.  */
 
 /* Instantiated by configure. */
 #if ! defined (__GMP_WITHIN_CONFIGURE)
-#define GMP_LIMB_BITS                      64
+#define GMP_LIMB_BITS                      32
 #define GMP_NAIL_BITS                      0
 #endif
 #define GMP_NUMB_BITS     (GMP_LIMB_BITS - GMP_NAIL_BITS)
@@ -1287,8 +1287,8 @@ enum
 };
 
 /* Define CC and CFLAGS which were used to build this version of GMP */
-#define __GMP_CC "gcc"
-#define __GMP_CFLAGS "-g -O2"
+#define __GMP_CC "clang"
+#define __GMP_CFLAGS "--target=wasm32-unknown-wasi --sysroot=/home/botond/Asztal/gmp/wasi-libc/sysroot"
 
 /* Major version number is the value of __GNU_MP__ too, above. */
 #define __GNU_MP_VERSION            6

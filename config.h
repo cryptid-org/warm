@@ -40,7 +40,7 @@ see https://www.gnu.org/licenses/.
 /* #undef GMP_MPARAM_H_SUGGEST */
 
 /* Define to 1 if you have the `alarm' function. */
-#define HAVE_ALARM 1
+/* #undef HAVE_ALARM */
 
 /* Define to 1 if alloca() works (via gmp-impl.h). */
 #define HAVE_ALLOCA 1
@@ -92,11 +92,11 @@ see https://www.gnu.org/licenses/.
 
 /* Define to 1 if you have the declaration of `sys_errlist', and to 0 if you
    don't. */
-#define HAVE_DECL_SYS_ERRLIST 1
+#define HAVE_DECL_SYS_ERRLIST 0
 
 /* Define to 1 if you have the declaration of `sys_nerr', and to 0 if you
    don't. */
-#define HAVE_DECL_SYS_NERR 1
+#define HAVE_DECL_SYS_NERR 0
 
 /* Define to 1 if you have the declaration of `ungetc', and to 0 if you don't.
    */
@@ -107,7 +107,7 @@ see https://www.gnu.org/licenses/.
 #define HAVE_DECL_VFPRINTF 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
+/* #undef HAVE_DLFCN_H */
 
 /* Define one of the following to 1 for the format of a `double'.
    If your format is not among these choices, or you don't know what it is,
@@ -128,7 +128,7 @@ see https://www.gnu.org/licenses/.
 #define HAVE_FLOAT_H 1
 
 /* Define to 1 if you have the `getpagesize' function. */
-#define HAVE_GETPAGESIZE 1
+/* #undef HAVE_GETPAGESIZE */
 
 /* Define to 1 if you have the `getrusage' function. */
 #define HAVE_GETRUSAGE 1
@@ -228,10 +228,10 @@ see https://www.gnu.org/licenses/.
 #define HAVE_MEMSET 1
 
 /* Define to 1 if you have the `mmap' function. */
-#define HAVE_MMAP 1
+/* #undef HAVE_MMAP */
 
 /* Define to 1 if you have the `mprotect' function. */
-#define HAVE_MPROTECT 1
+/* #undef HAVE_MPROTECT */
 
 /* Define to 1 each of the following for which a native (ie. CPU specific)
     implementation of the corresponding routine exists.  */
@@ -359,10 +359,10 @@ see https://www.gnu.org/licenses/.
 #define HAVE_NL_TYPES_H 1
 
 /* Define to 1 if you have the `obstack_vprintf' function. */
-#define HAVE_OBSTACK_VPRINTF 1
+/* #undef HAVE_OBSTACK_VPRINTF */
 
 /* Define to 1 if you have the `popen' function. */
-#define HAVE_POPEN 1
+/* #undef HAVE_POPEN */
 
 /* Define to 1 if you have the `processor_info' function. */
 /* #undef HAVE_PROCESSOR_INFO */
@@ -381,19 +381,19 @@ see https://www.gnu.org/licenses/.
 #define HAVE_QUAD_T 1
 
 /* Define to 1 if you have the `raise' function. */
-#define HAVE_RAISE 1
+/* #undef HAVE_RAISE */
 
 /* Define to 1 if you have the `read_real_time' function. */
 /* #undef HAVE_READ_REAL_TIME */
 
 /* Define to 1 if you have the `sigaction' function. */
-#define HAVE_SIGACTION 1
+/* #undef HAVE_SIGACTION */
 
 /* Define to 1 if you have the `sigaltstack' function. */
-#define HAVE_SIGALTSTACK 1
+/* #undef HAVE_SIGALTSTACK */
 
 /* Define to 1 if you have the `sigstack' function. */
-#define HAVE_SIGSTACK 1
+/* #undef HAVE_SIGSTACK */
 
 /* Tune directory speed_cyclecounter, undef=none, 1=32bits, 2=64bits) */
 /* #undef HAVE_SPEED_CYCLECOUNTER */
@@ -438,7 +438,7 @@ see https://www.gnu.org/licenses/.
 #define HAVE_SYSCONF 1
 
 /* Define to 1 if you have the `sysctl' function. */
-#define HAVE_SYSCTL 1
+/* #undef HAVE_SYSCTL */
 
 /* Define to 1 if you have the `sysctlbyname' function. */
 /* #undef HAVE_SYSCTLBYNAME */
@@ -453,7 +453,7 @@ see https://www.gnu.org/licenses/.
 /* #undef HAVE_SYS_IOGRAPH_H */
 
 /* Define to 1 if you have the <sys/mman.h> header file. */
-#define HAVE_SYS_MMAN_H 1
+/* #undef HAVE_SYS_MMAN_H */
 
 /* Define to 1 if you have the <sys/param.h> header file. */
 #define HAVE_SYS_PARAM_H 1
@@ -471,7 +471,7 @@ see https://www.gnu.org/licenses/.
 #define HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/sysctl.h> header file. */
-#define HAVE_SYS_SYSCTL_H 1
+/* #undef HAVE_SYS_SYSCTL_H */
 
 /* Define to 1 if you have the <sys/sysinfo.h> header file. */
 #define HAVE_SYS_SYSINFO_H 1
@@ -540,19 +540,19 @@ see https://www.gnu.org/licenses/.
 #define RETSIGTYPE void
 
 /* The size of `mp_limb_t', as computed by sizeof. */
-#define SIZEOF_MP_LIMB_T 8
+#define SIZEOF_MP_LIMB_T 4
 
 /* The size of `unsigned', as computed by sizeof. */
 #define SIZEOF_UNSIGNED 4
 
 /* The size of `unsigned long', as computed by sizeof. */
-#define SIZEOF_UNSIGNED_LONG 8
+#define SIZEOF_UNSIGNED_LONG 4
 
 /* The size of `unsigned short', as computed by sizeof. */
 #define SIZEOF_UNSIGNED_SHORT 2
 
 /* The size of `void *', as computed by sizeof. */
-#define SIZEOF_VOID_P 8
+#define SIZEOF_VOID_P 4
 
 /* Define to 1 if sscanf requires writable inputs */
 /* #undef SSCANF_WRITABLE_INPUT */
