@@ -28,21 +28,30 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the GNU MP Library.  If not,
 see https://www.gnu.org/licenses/.  */
 
-#include <stdio.h>  /* for NULL */
 #include "gmp.h"
+
+#include <stdio.h>
+
 #include "gmp-impl.h"
 
-void
-mp_get_memory_functions (void *(**alloc_func) (size_t),
-			 void *(**realloc_func) (void *, size_t, size_t),
-			 void (**free_func) (void *, size_t)) __GMP_NOTHROW
+
+void mp_get_memory_functions(
+  void *(**alloc_func) (size_t),
+  void *(**realloc_func) (void *, size_t, size_t),
+  void (**free_func) (void *, size_t)) __GMP_NOTHROW
 {
   if (alloc_func != NULL)
+  {
     *alloc_func = __gmp_allocate_func;
+  }
 
   if (realloc_func != NULL)
+  {
     *realloc_func = __gmp_reallocate_func;
+  }
 
   if (free_func != NULL)
+  {
     *free_func = __gmp_free_func;
+  }
 }
