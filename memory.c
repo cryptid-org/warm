@@ -179,9 +179,9 @@ void __gmp_default_free(void *blk_ptr, size_t blk_size)
 #endif
 
 #if defined(WARM_COMPILE_TIME_SET_ALLOCATOR)
-# undef __gmp_default_allocate __gmp_allocate_func
-# undef __gmp_default_reallocate __gmp_reallocate_func
-# undef __gmp_default_free __gmp_free_func
+# undef __gmp_default_allocate
+# undef __gmp_default_reallocate
+# undef __gmp_default_free
 #endif
 
 #endif
