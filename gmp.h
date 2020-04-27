@@ -36,6 +36,13 @@ see https://www.gnu.org/licenses/.  */
 #endif
 
 
+#if !defined(WARM_RUNTIME_SET_ALLOCATOR) && !defined(WARM_COMPILE_TIME_SET_ALLOCATOR)
+# error Either WARM_RUNTIME_SET_ALLOCATOR or WARM_COMPILE_TIME_SET_ALLOCATOR \
+        must be present when compiling WARM. \
+        Please check the documentation for the role of these defines.
+#endif
+
+
 /* Instantiated by configure. */
 #if ! defined (__GMP_WITHIN_CONFIGURE)
 #define GMP_LIMB_BITS                      32
