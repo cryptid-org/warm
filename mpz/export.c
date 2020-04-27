@@ -68,7 +68,7 @@ mpz_export (void *data, size_t *countp, int order,
   *countp = count;
 
   if (data == NULL)
-    data = (*__gmp_allocate_func) (count*size);
+    data = __WARM_ALLOCATE (count*size);
 
   if (endian == 0)
     endian = HOST_ENDIAN;

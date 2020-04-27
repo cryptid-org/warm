@@ -5217,39 +5217,4 @@ mpn_toom54_mul_itch (mp_size_t an, mp_size_t bn)
 #define mpn_fft_mul mpn_nussbaumer_mul
 #endif
 
-#ifdef __cplusplus
-
-/* A little helper for a null-terminated __gmp_allocate_func string.
-   The destructor ensures it's freed even if an exception is thrown.
-   The len field is needed by the destructor, and can be used by anyone else
-   to avoid a second strlen pass over the data.
-
-   Since our input is a C string, using strlen is correct.  Perhaps it'd be
-   more C++-ish style to use std::char_traits<char>::length, but char_traits
-   isn't available in gcc 2.95.4.  */
-
-class gmp_allocated_string {
- public:
-  char *str;
-  size_t len;
-  gmp_allocated_string(char *arg)
-  {
-    str = arg;
-    len = std::strlen (str);
-  }
-  ~gmp_allocated_string()
-  {
-    (*__gmp_free_func) (str, len+1);
-  }
-};
-
-std::istream &__gmpz_operator_in_nowhite (std::istream &, mpz_ptr, char);
-int __gmp_istream_set_base (std::istream &, char &, bool &, bool &);
-void __gmp_istream_set_digits (std::string &, std::istream &, char &, bool &, int);
-void __gmp_doprnt_params_from_ios (struct doprnt_params_t *, std::ios &);
-std::ostream& __gmp_doprnt_integer_ostream (std::ostream &, struct doprnt_params_t *, char *);
-extern const struct doprnt_funs_t  __gmp_asprintf_funs_noformat;
-
-#endif /* __cplusplus */
-
 #endif /* __GMP_IMPL_H__ */

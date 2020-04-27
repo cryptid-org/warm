@@ -61,7 +61,7 @@ __gmp_tmp_reentrant_alloc (struct tmp_reentrant_t **markp, size_t size)
 #define P   ((struct tmp_reentrant_t *) p)
 
   total_size = size + HSIZ;
-  p = (char *) (*__gmp_allocate_func) (total_size);
+  p = (char *) __WARM_ALLOCATE (total_size);
   P->size = total_size;
   P->next = *markp;
   *markp = P;
@@ -76,7 +76,7 @@ __gmp_tmp_reentrant_free (struct tmp_reentrant_t *mark)
   while (mark != NULL)
     {
       next = mark->next;
-      (*__gmp_free_func) ((char *) mark, mark->size);
+      __WARM_FREE ((char *) mark, mark->size);
       mark = next;
     }
 }
