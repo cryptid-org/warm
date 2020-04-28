@@ -36,6 +36,13 @@ see https://www.gnu.org/licenses/.  */
 #endif
 
 
+#if !defined(WARM_RUNTIME_SET_ALLOCATOR) && !defined(WARM_COMPILE_TIME_SET_ALLOCATOR)
+# error Either WARM_RUNTIME_SET_ALLOCATOR or WARM_COMPILE_TIME_SET_ALLOCATOR \
+        must be present when compiling WARM. \
+        Please check the documentation for the role of these defines.
+#endif
+
+
 /* Instantiated by configure. */
 #if ! defined (__GMP_WITHIN_CONFIGURE)
 #define GMP_LIMB_BITS                      32
@@ -428,15 +435,20 @@ typedef __mpz_struct *mpz_ptr;
 #endif
 
 
-#define mp_set_memory_functions __gmp_set_memory_functions
-__GMP_DECLSPEC void mp_set_memory_functions (void *(*) (size_t),
-				      void *(*) (void *, size_t, size_t),
-				      void (*) (void *, size_t)) __GMP_NOTHROW;
+#ifdef WARM_RUNTIME_SET_ALLOCATOR
+# define mp_set_memory_functions __gmp_set_memory_functions
+  __GMP_DECLSPEC void mp_set_memory_functions(
+    void *(*) (size_t),
+    void *(*) (void *, size_t, size_t),
+    void (*) (void *, size_t)) __GMP_NOTHROW;
+#endif
 
 #define mp_get_memory_functions __gmp_get_memory_functions
-__GMP_DECLSPEC void mp_get_memory_functions (void *(**) (size_t),
-				      void *(**) (void *, size_t, size_t),
-				      void (**) (void *, size_t)) __GMP_NOTHROW;
+__GMP_DECLSPEC void mp_get_memory_functions (
+  void *(**) (size_t),
+  void *(**) (void *, size_t, size_t),
+  void (**) (void *, size_t)) __GMP_NOTHROW;
+
 
 #define mp_bits_per_limb __gmp_bits_per_limb
 __GMP_DECLSPEC extern const int mp_bits_per_limb;

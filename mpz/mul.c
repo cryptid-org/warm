@@ -110,7 +110,7 @@ mpz_mul (mpz_ptr w, mpz_srcptr u, mpz_srcptr v)
 	  free_me_size = ALLOC (w);
 	}
       else
-	(*__gmp_free_func) (wp, (size_t) ALLOC (w) * GMP_LIMB_BYTES);
+	__WARM_FREE (wp, (size_t) ALLOC (w) * GMP_LIMB_BYTES);
 
       ALLOC (w) = wsize;
       wp = __GMP_ALLOCATE_FUNC_LIMBS (wsize);
@@ -152,6 +152,6 @@ mpz_mul (mpz_ptr w, mpz_srcptr u, mpz_srcptr v)
 
   SIZ (w) = sign_product < 0 ? -wsize : wsize;
   if (free_me != NULL)
-    (*__gmp_free_func) (free_me, free_me_size * GMP_LIMB_BYTES);
+    __WARM_FREE (free_me, free_me_size * GMP_LIMB_BYTES);
   TMP_FREE;
 }

@@ -29,22 +29,35 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the GNU MP Library.  If not,
 see https://www.gnu.org/licenses/.  */
 
+#ifdef WARM_RUNTIME_SET_ALLOCATOR
 #include "gmp.h"
+
+#include <stdio.h>
+
 #include "gmp-impl.h"
 
-void
-mp_set_memory_functions (void *(*alloc_func) (size_t),
-			 void *(*realloc_func) (void *, size_t, size_t),
-			 void (*free_func) (void *, size_t)) __GMP_NOTHROW
+void mp_set_memory_functions(
+  void *(*alloc_func) (size_t),
+  void *(*realloc_func) (void *, size_t, size_t),
+  void (*free_func) (void *, size_t)) __GMP_NOTHROW
 {
-  if (alloc_func == 0)
+  if (alloc_func == NULL)
+  {
     alloc_func = __gmp_default_allocate;
-  if (realloc_func == 0)
+  }
+
+  if (realloc_func == NULL)
+  {
     realloc_func = __gmp_default_reallocate;
-  if (free_func == 0)
+  }
+
+  if (free_func == NULL)
+  {
     free_func = __gmp_default_free;
+  }
 
   __gmp_allocate_func = alloc_func;
   __gmp_reallocate_func = realloc_func;
   __gmp_free_func = free_func;
 }
+#endif

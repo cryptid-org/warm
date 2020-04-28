@@ -690,43 +690,79 @@ __GMP_DECLSPEC void  __gmp_tmp_debug_free (const char *, int, int,
     (y) = __mpq_srcptr_swap__tmp;                                       \
   } while (0)
 
+#if defined(WARM_RUNTIME_SET_ALLOCATOR)
+  __GMP_DECLSPEC extern void * (*__gmp_allocate_func) (size_t);
+  __GMP_DECLSPEC extern void * (*__gmp_reallocate_func) (void *, size_t, size_t);
+  __GMP_DECLSPEC extern void   (*__gmp_free_func) (void *, size_t);
 
-/* Enhancement: __gmp_allocate_func could have "__attribute__ ((malloc))",
-   but current gcc (3.0) doesn't seem to support that.  */
-__GMP_DECLSPEC extern void * (*__gmp_allocate_func) (size_t);
-__GMP_DECLSPEC extern void * (*__gmp_reallocate_func) (void *, size_t, size_t);
-__GMP_DECLSPEC extern void   (*__gmp_free_func) (void *, size_t);
+  __GMP_DECLSPEC void *__gmp_default_allocate (size_t);
+  __GMP_DECLSPEC void *__gmp_default_reallocate (void *, size_t, size_t);
+  __GMP_DECLSPEC void __gmp_default_free (void *, size_t);
 
-__GMP_DECLSPEC void *__gmp_default_allocate (size_t);
-__GMP_DECLSPEC void *__gmp_default_reallocate (void *, size_t, size_t);
-__GMP_DECLSPEC void __gmp_default_free (void *, size_t);
+# define __WARM_ALLOCATE(size) ((*__gmp_allocate_func)(size))
+# define __WARM_REALLOCATE(old_ptr, old_size, new_size) ((*__gmp_reallocate_func)(old_ptr, old_size, new_size))
+# define __WARM_FREE(ptr, size) ((*__gmp_free_func)(ptr, size))
 
-#define __GMP_ALLOCATE_FUNC_TYPE(n,type) \
-  ((type *) (*__gmp_allocate_func) ((n) * sizeof (type)))
-#define __GMP_ALLOCATE_FUNC_LIMBS(n)   __GMP_ALLOCATE_FUNC_TYPE (n, mp_limb_t)
+# define __GMP_ALLOCATE_FUNC_TYPE(n,type) \
+    ((type *) (*__gmp_allocate_func) ((n) * sizeof (type)))
+# define __GMP_ALLOCATE_FUNC_LIMBS(n)   __GMP_ALLOCATE_FUNC_TYPE (n, mp_limb_t)
 
-#define __GMP_REALLOCATE_FUNC_TYPE(p, old_size, new_size, type)		\
-  ((type *) (*__gmp_reallocate_func)					\
-   (p, (old_size) * sizeof (type), (new_size) * sizeof (type)))
-#define __GMP_REALLOCATE_FUNC_LIMBS(p, old_size, new_size)		\
-  __GMP_REALLOCATE_FUNC_TYPE(p, old_size, new_size, mp_limb_t)
+# define __GMP_REALLOCATE_FUNC_TYPE(p, old_size, new_size, type) \
+    ((type *) (*__gmp_reallocate_func) \
+    (p, (old_size) * sizeof (type), (new_size) * sizeof (type)))
+# define __GMP_REALLOCATE_FUNC_LIMBS(p, old_size, new_size) \
+    __GMP_REALLOCATE_FUNC_TYPE(p, old_size, new_size, mp_limb_t)
 
-#define __GMP_FREE_FUNC_TYPE(p,n,type) (*__gmp_free_func) (p, (n) * sizeof (type))
-#define __GMP_FREE_FUNC_LIMBS(p,n)     __GMP_FREE_FUNC_TYPE (p, n, mp_limb_t)
+# define __GMP_FREE_FUNC_TYPE(p,n,type) (*__gmp_free_func) (p, (n) * sizeof (type))
+# define __GMP_FREE_FUNC_LIMBS(p,n)     __GMP_FREE_FUNC_TYPE (p, n, mp_limb_t)
 
-#define __GMP_REALLOCATE_FUNC_MAYBE(ptr, oldsize, newsize)		\
-  do {									\
-    if ((oldsize) != (newsize))						\
-      (ptr) = (*__gmp_reallocate_func) (ptr, oldsize, newsize);		\
-  } while (0)
+# define __GMP_REALLOCATE_FUNC_MAYBE(ptr, oldsize, newsize) \
+    do { \
+      if ((oldsize) != (newsize)) \
+        (ptr) = (*__gmp_reallocate_func) (ptr, oldsize, newsize); \
+    } while (0)
 
-#define __GMP_REALLOCATE_FUNC_MAYBE_TYPE(ptr, oldsize, newsize, type)	\
-  do {									\
-    if ((oldsize) != (newsize))						\
-      (ptr) = (type *) (*__gmp_reallocate_func)				\
-	(ptr, (oldsize) * sizeof (type), (newsize) * sizeof (type));	\
-  } while (0)
+# define __GMP_REALLOCATE_FUNC_MAYBE_TYPE(ptr, oldsize, newsize, type) \
+    do { \
+      if ((oldsize) != (newsize)) \
+        (ptr) = (type *) (*__gmp_reallocate_func) \
+    (ptr, (oldsize) * sizeof (type), (newsize) * sizeof (type)); \
+    } while (0)
+#elif defined(WARM_COMPILE_TIME_SET_ALLOCATOR)
+  __GMP_DECLSPEC extern void *__gmp_allocate_func(size_t size);
+  __GMP_DECLSPEC extern void *__gmp_reallocate_func(void *old_ptr, size_t old_size, size_t new_size);
+  __GMP_DECLSPEC extern void __gmp_free_func(void *ptr, size_t size);
 
+# define __WARM_ALLOCATE(size) (__gmp_allocate_func(size))
+# define __WARM_REALLOCATE(old_ptr, old_size, new_size) (__gmp_reallocate_func(old_ptr, old_size, new_size))
+# define __WARM_FREE(ptr, size) (__gmp_free_func(ptr, size))
+
+# define __GMP_ALLOCATE_FUNC_TYPE(n,type) \
+    ((type *) __gmp_allocate_func((n) * sizeof (type)))
+# define __GMP_ALLOCATE_FUNC_LIMBS(n)   __GMP_ALLOCATE_FUNC_TYPE (n, mp_limb_t)
+
+# define __GMP_REALLOCATE_FUNC_TYPE(p, old_size, new_size, type) \
+    ((type *) __gmp_reallocate_func \
+    (p, (old_size) * sizeof (type), (new_size) * sizeof (type)))
+# define __GMP_REALLOCATE_FUNC_LIMBS(p, old_size, new_size) \
+    __GMP_REALLOCATE_FUNC_TYPE(p, old_size, new_size, mp_limb_t)
+
+# define __GMP_FREE_FUNC_TYPE(p,n,type) __gmp_free_func(p, (n) * sizeof (type))
+# define __GMP_FREE_FUNC_LIMBS(p,n)     __GMP_FREE_FUNC_TYPE (p, n, mp_limb_t)
+
+# define __GMP_REALLOCATE_FUNC_MAYBE(ptr, oldsize, newsize) \
+    do { \
+      if ((oldsize) != (newsize)) \
+        (ptr) = __gmp_reallocate_func(ptr, oldsize, newsize); \
+    } while (0)
+
+# define __GMP_REALLOCATE_FUNC_MAYBE_TYPE(ptr, oldsize, newsize, type) \
+    do { \
+      if ((oldsize) != (newsize)) \
+        (ptr) = (type *) __gmp_reallocate_func \
+    (ptr, (oldsize) * sizeof (type), (newsize) * sizeof (type)); \
+    } while (0)
+#endif
 
 /* Dummy for non-gcc, code involving it will go dead. */
 #if ! defined (__GNUC__) || __GNUC__ < 2
@@ -5180,40 +5216,5 @@ mpn_toom54_mul_itch (mp_size_t an, mp_size_t bn)
 #else
 #define mpn_fft_mul mpn_nussbaumer_mul
 #endif
-
-#ifdef __cplusplus
-
-/* A little helper for a null-terminated __gmp_allocate_func string.
-   The destructor ensures it's freed even if an exception is thrown.
-   The len field is needed by the destructor, and can be used by anyone else
-   to avoid a second strlen pass over the data.
-
-   Since our input is a C string, using strlen is correct.  Perhaps it'd be
-   more C++-ish style to use std::char_traits<char>::length, but char_traits
-   isn't available in gcc 2.95.4.  */
-
-class gmp_allocated_string {
- public:
-  char *str;
-  size_t len;
-  gmp_allocated_string(char *arg)
-  {
-    str = arg;
-    len = std::strlen (str);
-  }
-  ~gmp_allocated_string()
-  {
-    (*__gmp_free_func) (str, len+1);
-  }
-};
-
-std::istream &__gmpz_operator_in_nowhite (std::istream &, mpz_ptr, char);
-int __gmp_istream_set_base (std::istream &, char &, bool &, bool &);
-void __gmp_istream_set_digits (std::string &, std::istream &, char &, bool &, int);
-void __gmp_doprnt_params_from_ios (struct doprnt_params_t *, std::ios &);
-std::ostream& __gmp_doprnt_integer_ostream (std::ostream &, struct doprnt_params_t *, char *);
-extern const struct doprnt_funs_t  __gmp_asprintf_funs_noformat;
-
-#endif /* __cplusplus */
 
 #endif /* __GMP_IMPL_H__ */

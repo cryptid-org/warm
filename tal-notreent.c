@@ -89,7 +89,7 @@ __gmp_tmp_alloc (unsigned long size)
 	  current_total_allocation = max_total_allocation;
 	}
 
-      chunk = (*__gmp_allocate_func) (chunk_size);
+      chunk = __WARM_ALLOCATE (chunk_size);
       header = (tmp_stack *) chunk;
       header->end = (char *) chunk + chunk_size;
       header->alloc_point = (char *) chunk + HSIZ;
@@ -124,7 +124,7 @@ __gmp_tmp_free (struct tmp_marker *mark)
       tmp = current;
       current = tmp->prev;
       current_total_allocation -= (((char *) (tmp->end) - (char *) tmp) - HSIZ);
-      (*__gmp_free_func) (tmp, (char *) tmp->end - (char *) tmp);
+      __WARM_FREE (tmp, (char *) tmp->end - (char *) tmp);
     }
   current->alloc_point = mark->alloc_point;
 }
